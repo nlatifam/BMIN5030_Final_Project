@@ -14,17 +14,38 @@ Use this template to complete your project throughout the course. Your Final Pro
 
 ## Overview {#sec-overview}
 
-Give a brief a description of your project and its goal(s), what data you are using to complete it, and what two faculty/staff in different fields you have spoken to about your project with a brief summary of what you learned from each person. Include a link to your final project GitHub repository.
+This project focuses on data harmonization of multisite neuroimaging data using FreeSurfer-derived brain structural measurements. The goal is to investigate differences in brain measurements across sites and explore approaches to reduce site-related variability, improving the consistency and comparability of neuroimaging datasets. The project uses multisite data provided through the Penn NeuroBridge Lab.
+
+[Final Project GitHub Repository](https://github.com/nlatifam/BMIN5030_Final_Project)
 
 ## Introduction {#sec-introduction}
 
-Describe the problem addressed, its significance, and some background to motivate the problem. This should extend what is in the @sec-overview.
+Neuroimaging is an important tool for studying brain structure and understanding neurological conditions. However, when MRI data are collected from multiple hospitals or research institutions, differences in scanners, imaging protocols, and acquisition methods can introduce unwanted variability into brain measurements. These differences can make it difficult to determine whether observed variations are caused by actual biological differences or technical factors. Data harmonization aims to reduce these site-related differences while preserving meaningful biological information. This project focuses on exploring data harmonization using multisite FreeSurfer-derived brain structural measurements to improve the consistency and comparability of neuroimaging data.
 
-Explain why your problem is interdisciplinary, what fields can contribute to its understanding, and incorporate background related to what you learned from meeting with faculty/staff.
+Addressing this challenge requires an interdisciplinary approach that combines neuroscience, biomedical informatics, and biostatistics. Through my work with Dr. Nishant Sinha at the Penn NeuroBridge Lab, I have been introduced to the computational challenges of analyzing neuroimaging data and the importance of ensuring data quality. Dr. Kristin Linn's research in biostatistics and neuroimaging provides another relevant perspective, particularly in developing statistical approaches to address variability across imaging sites. Neuroscience helps explain the biological significance of brain measurements, while biostatistics provides methods for identifying and adjusting for unwanted technical variation. Together, these fields demonstrate how interdisciplinary approaches can improve the reliability of neuroimaging research.
 
 ## Methods {#sec-methods}
 
-Describe the data used and general methodological approach used to address the problem described in the @sec-introduction. Subsequently, incorporate full R code necessary to retrieve and clean data, and perform analysis. Be sure to include a description of code so that others (including your future self) can understand what you are doing and why.
+This project uses a multisite neuroimaging dataset containing FreeSurfer-derived brain structural measurements, provided through the Penn NeuroBridge Lab. The initial analysis will focus on examining the structure and quality of the dataset, identifying missing values, and exploring potential differences in brain measurements across research sites. These exploratory analyses will help determine the extent of site-related variability and inform the selection of an appropriate data harmonization approach. Subsequent analyses will evaluate whether harmonization reduces unwanted site-related differences while preserving meaningful biological variation.
+
+```{r}
+
+library(readxl)
+
+data <- read_excel("freesurferStats.xlsx")
+
+dim(data)
+names(data)
+head(data)
+
+# Examine the structure of the dataset
+str(data)
+
+# Check for missing values in each variable
+colSums(is.na(data))
+```
+
+The dataset was imported into R using the `readxl` package. Initial exploratory analysis was performed to examine the dimensions, variable names, and first six observations of the dataset. These steps provide an initial understanding of the dataset's structure and help identify variables relevant to subsequent data harmonization analyses.
 
 ## Results {#sec-results}
 
