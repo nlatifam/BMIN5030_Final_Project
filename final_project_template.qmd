@@ -1,7 +1,7 @@
 ---
-title: "Your Title"
+title: "Data Harmonization of Multisite Neuroimaging Data"
 subtitle: "BMIN5030 Final Project"
-author: "FirstName LastName"
+author: "Nurlatifa Zahra Mohd Fuad"
 format: html
 editor: visual
 number-sections: true
@@ -9,8 +9,6 @@ embed-resources: true
 ---
 
 ------------------------------------------------------------------------
-
-Use this template to complete your project throughout the course. Your Final Project presentation will be based on the contents of this document. Replace the title/name above and text below with your own, but keep the headers. Feel free to change the theme and other display settings, although this is not required.
 
 ## Overview {#sec-overview}
 
@@ -43,13 +41,47 @@ str(data)
 
 # Check for missing values in each variable
 colSums(is.na(data))
+
+# Summarize participant demographics
+summary(data)
+
+# Examine control and patient groups
+table(data$isControl, useNA = "ifany")
+
+# Examine FreeSurfer versions
+table(data$freeSurferVer, useNA = "ifany")
+
+# Check for zero values in brain measurements
+brain_cols <- grep("^(Left_|Right_)", names(data), value = TRUE)
+
+colSums(data[brain_cols] == 0, na.rm = TRUE)
+
+# Identify participants with zero brain measurements
+zero_rows <- rowSums(data[brain_cols] == 0, na.rm = TRUE)
+
+# Count participants with at least one zero
+sum(zero_rows > 0)
+
+# Examine affected participants
+data[zero_rows > 0, c("record_id", "isControl", "freeSurferVer")]
+
+# Count zero-valued brain regions for each affected participant
+table(zero_rows[zero_rows > 0])
 ```
 
-The dataset was imported into R using the `readxl` package. Initial exploratory analysis was performed to examine the dimensions, variable names, and first six observations of the dataset. These steps provide an initial understanding of the dataset's structure and help identify variables relevant to subsequent data harmonization analyses.
+The dataset was imported into R using the `readxl` package. Initial exploratory analysis was performed to examine the dimensions, variable names, data types, and first six observations of the dataset. Missing values were assessed to identify potential data quality issues. Additional analyses examined the distribution of participant groups and FreeSurfer software versions to identify potential sources of variability. These steps provide an initial understanding of the dataset's structure and characteristics, helping inform subsequent data harmonization analyses.
+
+Additional quality-control analysis identified five participants (0.8%) with zero-valued measurements across all 14 examined brain regions. Three were non-controls and two were controls. All five participants were processed using FreeSurfer version 7. These findings suggest potentially missing or unsuccessful brain segmentation measurements rather than true anatomical volumes. The five participants were flagged for potential exclusion from subsequent analyses, pending further investigation. Excluding these participants would leave 607 participants with nonzero measurements across the examined brain regions.
 
 ## Results {#sec-results}
 
-Describe your results and include relevant tables, plots, and code/comments used to obtain them. You may refer to the @sec-methods as needed. End with a brief conclusion of your findings related to the question you set out to address. You can include references if you'd like, but this is not required.
+Initial exploratory analysis identified 612 participants and 21 variables in the dataset. Of these participants, 305 (49.8%) were classified as controls and 307 (50.2%) as non-controls. All participants were processed using FreeSurfer version 7.
+
+Missing-value analysis identified 498 missing values in `penn_record_id`, potentially reflecting the withholding of participant identifiers for privacy or de-identification purposes. No missing values were identified in the brain structural measurements.
+
+These preliminary findings indicate that the structural brain measurements are complete. Further analysis will explore variability in brain measurements and determine whether sufficient information is available to investigate site-related differences and potential harmonization approaches.
+
+Further quality-control analysis identified five zero values in each of the 14 brain-region measurements. Although these values were not recorded as missing (`NA`), they may represent unavailable measurements or segmentation-related issues. Additional investigation is needed to determine whether the zero values occur in the same participants and whether these observations should be excluded from subsequent analyses.
 
 ## Conclusion
 
